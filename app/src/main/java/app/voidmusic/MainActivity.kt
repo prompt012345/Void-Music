@@ -52,7 +52,7 @@ class MainActivity : Activity() {
   else->settings()
  }}
  private fun searchField(){val box=LinearLayout(this).apply{gravity=Gravity.CENTER_VERTICAL;background=rounded(surface,dp(15),Color.rgb(37,45,61),dp(1));setPadding(dp(10),0,dp(5),0)}
-  query=EditText(this).apply{hint="Titre, artiste, album...";setHintTextColor(muted);setTextColor(primary);textSize=14f;singleLine=true;imeOptions=EditorInfo.IME_ACTION_SEARCH;background=null;setOnEditorActionListener{_,a,_->if(a==EditorInfo.IME_ACTION_SEARCH){searchTracks();true}else false}}
+  query=EditText(this).apply{hint="Titre, artiste, album...";setHintTextColor(muted);setTextColor(primary);textSize=14f;setSingleLine(true);imeOptions=EditorInfo.IME_ACTION_SEARCH;background=null;setOnEditorActionListener{_,a,_->if(a==EditorInfo.IME_ACTION_SEARCH){searchTracks();true}else false}}
   box.addView(query,LinearLayout.LayoutParams(0,dp(50),1f));box.addView(button("CHERCHER",cyan,bg){searchTracks()},LinearLayout.LayoutParams(-2,dp(40)));content.addView(box,LinearLayout.LayoutParams(-1,-2).apply{bottomMargin=dp(5)});sourcePicker=Spinner(this);val providers=arrayOf("Toutes les sources","Deezer","Audius","SoundCloud");sourcePicker.adapter=ArrayAdapter(this,android.R.layout.simple_spinner_dropdown_item,providers);sourcePicker.setSelection(providers.indexOf(selectedSource).coerceAtLeast(0));sourcePicker.onItemSelectedListener=object:AdapterView.OnItemSelectedListener{override fun onNothingSelected(parent:AdapterView<*>?){};override fun onItemSelected(parent:AdapterView<*>?,view:View?,position:Int,id:Long){selectedSource=providers[position]}};content.addView(sourcePicker,LinearLayout.LayoutParams(-1,dp(44)))
  }
  private fun searchTracks(){
@@ -130,8 +130,8 @@ class MainActivity : Activity() {
   content.addView(button("TESTER AUDIUS",surface2,primary){io.submit{val message=try{"Audius accessible · "+api.searchAudius("VOID").size+" résultat(s)"}catch(e:Exception){e.localizedMessage?:"Audius indisponible"};runOnUiThread{if(!isFinishing&&!isDestroyed)setStatus(message)}}})
   section("SoundCloud · accès API")
   content.addView(label("SoundCloud exige une application enregistrée ; les inscriptions demandent actuellement Artist Pro. Saisis les identifiants de ta propre application. L’application demande un jeton Client Credentials pour la recherche publique.",13f,muted,false))
-  val idField=EditText(this).apply{hint="SoundCloud Client ID";setTextColor(primary);setHintTextColor(muted);singleLine=true;setText(soundCloudCredentials.clientId())}
-  val secretField=EditText(this).apply{hint="SoundCloud Client Secret";setTextColor(primary);setHintTextColor(muted);singleLine=true;inputType=android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;setText(soundCloudCredentials.secret())}
+  val idField=EditText(this).apply{hint="SoundCloud Client ID";setTextColor(primary);setHintTextColor(muted);setSingleLine(true);setText(soundCloudCredentials.clientId())}
+  val secretField=EditText(this).apply{hint="SoundCloud Client Secret";setTextColor(primary);setHintTextColor(muted);setSingleLine(true);inputType=android.text.InputType.TYPE_CLASS_TEXT or android.text.InputType.TYPE_TEXT_VARIATION_PASSWORD;setText(soundCloudCredentials.secret())}
   content.addView(idField);content.addView(secretField)
   content.addView(label("Le secret est chiffré avec Android Keystore sur cet appareil. Une application mobile ne peut toutefois pas le protéger d’un appareil compromis pendant son utilisation. Ne partage pas ce secret.",11f,muted,false).apply{setPadding(0,dp(6),0,dp(7))})
   content.addView(button("ENREGISTRER LES IDENTIFIANTS",surface2,primary){

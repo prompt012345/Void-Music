@@ -111,6 +111,7 @@ class CatalogApi {
             val user = item.optJSONObject("user")
             val artwork = item.optJSONObject("artwork")
             val id = item.optString("id")
+            val permalink = item.optString("permalink", item.optString("permalink_url"))
             if (id.isBlank()) null else Track(
                 id, item.optString("title", "Titre inconnu"),
                 user?.optString("name")?.takeIf(String::isNotBlank)
